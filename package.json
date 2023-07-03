@@ -1,0 +1,78 @@
+{
+  "name": "@scbd/quick-form",
+  "version": "0.0.6-alpha",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "rm -rf dist && dist-builder build",
+    "preview": "export PREVIEW=true && vite preview --host",
+    "preview-widget": "export WIDGET_PREVIEW=true && vite preview --open",
+    "release-dev-s3": "dist-builder releaseDev -f",
+    "release": "yarn publish --access=public --tag latest",
+    "clean-reinstall": "rm -f yarn.lock rm -f package-lock.json && rm -rf node_modules && CXXFLAGS=\"--std=c++17\" yarn install --force"
+  },
+  "main": "dist/es/index.min.js",
+  "web": "dist/es/index.min.js",
+  "umd": "dist/umd/index.min.js",
+  "unpkg": "dist/es/index.min.js",
+  "jsdelivr": "dist/es/index.min.js",
+  "module": "dist/es/index.min.js",
+  "jsnext:main": "dist/es/index.min.js",
+  "src": "src/index.js",
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
+  "browser": {
+    "./browser": "dist/es/index.min.js",
+    "./style": "dist/style.css",
+    "./": "dist/es/index.min.js"
+  },
+  "exports": {
+    ".": [
+      {
+        "import": "./dist/es/index.min.js",
+        "require": "./dist/es/index.min.js",
+        "style": "./dist/es/style.css",
+        "src": "./src",
+        "dist": "./dist",
+        "default": "./dist/es/index.min.js"
+      }
+    ],
+    "./dist/": "./dist/",
+    "./src/": "./src/"
+  },
+  "dependencies": {
+    "@scbd-chm/cached-apis": "0.0.3-alpha",
+    "@scbd/self-embedding-component": "3.1.0",
+    "@scbd/www-css": "1.0.2",
+    "axios": "1.4.0",
+    "change-case": "4.1.2",
+    "lodash.clonedeep": "4.5.0",
+    "lodash.get": "4.4.2",
+    "lodash.intersection": "4.4.0",
+    "lodash.isempty": "4.4.0",
+    "lodash.isfunction": "3.0.9",
+    "lodash.isnil": "4.0.0",
+    "lodash.isplainobject": "4.0.6",
+    "lodash.set": "4.3.2",
+    "luxon": "3.3.0",
+    "pinia": "2.0.35",
+    "vee-validate": "4.8.6",
+    "vue": "^3.2.47",
+    "vue-advanced-cropper": "2.8.8",
+    "vue-demi": "^0.14.0",
+    "vue-i18n": "9.2.2",
+    "vue-multiselect": "3.0.0-beta.1",
+    "vue-recaptcha": "2.0.3",
+    "vue-upload-component": "3.1.6",
+    "yup": "1.1.1"
+  },
+  "devDependencies": {
+    "@scbd/dist-builder": "https://github.com/scbd/dist-builder.git",
+    "consola": "3.1.0",
+    "sass": "1.32.11",
+    "vite": "4.3.5"
+  }
+}
