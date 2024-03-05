@@ -20,6 +20,7 @@ import   isAdmin         from '@/composables/is-admin.js';
 import   t               from '@/composables/i18n.js';
 import   Icon            from '@/components/Icon.vue';
 import { useMeStore }    from '@/composables/stores/me';
+import set from 'lodash.set';
 
 export default {
     name      : 'SignInUp',
@@ -41,8 +42,11 @@ function setup(props){
             if(m.payload.userID && m.payload.userID === 1) return isAuthenticated.value = false;
             if(m.payload?.profile?.UserID && m.payload.profile.UserID === 1) return isAuthenticated.value = false;
 
+            show.value = false;
             return isAuthenticated.value = true
         })
+
+        setTimeout(()=>isAuthenticated.value = meStore.isAuthenticated, 500);
     return { isAuthenticated,  show, options, returnUrl, ...setUpFunctions };
 }
 
