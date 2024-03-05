@@ -15,7 +15,7 @@ export default {
   'attachments.placeholder'                : 'Links to full message and/or video messages',
   'creator.worksFor.country'               : 'Country',
   'creator.worksFor.country.placeholder'   : 'Select your organization\'s country',
-  'type'                                   : 'Message Type',
+  'type'                                   : 'Organization Type',
   'type.placeholder'                       : ' ',
   'name'                                   : 'Title',
   'name.placeholder'                       : ' ',

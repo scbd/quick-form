@@ -30,7 +30,7 @@ export default {
     {  columns: [ { name: 'useAccount',                  is: 'UseAccount',  options: { uncheckedValue: false, checkedValue: true, map: { email: 'creator.email', name: 'creator.name', organization: 'creator.worksFor.name', country: 'creator.worksFor.country'  }} } ] },
     {  columns: [ { name: 'creator.email',              is: 'TextInput',   options: { type: 'email', rules: { format: 'email', required: true } } }  ] },
     {  columns: [ { name: 'creator.name',               is: 'LString',     options: { rules: { required: true, max: 100 } } } ] },
-    {  columns: [ { name: 'creator.worksFor.name',      is: 'LString',     options: { rules: { max: 100 } } } ] },
+    {  columns: [ { name: 'creator.worksFor.name',      is: 'LString',     options: { rules: { max: 100, required: true, } } } ] },
     {  columns: [ { name: 'creator.jobTitle',           is: 'LString',     options: { rules: { max: 100 } } } ] },
     {  columns: [ { name: 'creator.worksFor.country',   is: 'ChmSelect',   options: { type: 'countries',  rules: { required: true } }  }  ] },
     {  columns: [ { name: 'name',                       is: 'LString',     options: { adminOnly: true, rules: { max: 100 } } } ] },

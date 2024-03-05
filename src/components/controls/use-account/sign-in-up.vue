@@ -7,7 +7,7 @@
 
             <p v-if="options?.accountsUrl">
                 {{ t('You are not signed in with your UN Biodiverity account.') }}  
-                {{ t('Please') }} <a :href="`${options?.accountsUrl}/signin?returnUrl=${returnUrl}`">{{ t('sign in')}}</a> {{ t('or optionally')}} <a :href="`${options?.accountsUrl}/signup?returnUrl=${returnUrl}`">{{ t('sign up')}}</a>.
+                {{ t('Optionally') }} <a :href="`${options?.accountsUrl}/signin?returnUrl=${returnUrl}`">{{ t('sign in')}}</a> {{ t('or')}} <a :href="`${options?.accountsUrl}/signup?returnUrl=${returnUrl}`">{{ t('sign up')}}</a>.
             </p>
         </div>
     </div>

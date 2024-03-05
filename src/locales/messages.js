@@ -1,5 +1,7 @@
 export default {
   en: {
+    'Optionally':'Optionally',
+    'or':'or',
   Name                                                                                                                                                                 : 'Name',
   Status                                                                                                                                                               : 'Status',
   Identifier                                                                                                                                                           : 'Identifier',
