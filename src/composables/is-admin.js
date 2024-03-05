@@ -1,4 +1,4 @@
-import { computed   } from 'vue-demi';
+import { computed   } from 'vue';
 import { useMeStore } from '@/composables/stores/me';
 
 export default computed(isAdminFunction)

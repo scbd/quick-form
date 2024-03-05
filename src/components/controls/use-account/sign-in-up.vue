@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { toRef   , ref } from 'vue-demi';
+import { toRef   , ref } from 'vue';
 import { isServer      } from '@/composables/ssr.js';
 import   isAdmin         from '@/composables/is-admin.js';
 import   t               from '@/composables/i18n.js';

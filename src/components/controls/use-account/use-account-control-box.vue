@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import { toRefs,  computed }  from 'vue-demi';
+  import { toRefs,  computed }  from 'vue';
   import { useField          }  from 'vee-validate';
   import { useMeStore        }  from '@/composables/stores/me';
   import   t  , { getLocale  }  from '@/composables/i18n.js';

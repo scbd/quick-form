@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { paramCase } from 'change-case'
+import { kebabCase as paramCase } from 'change-case'
 import consola from 'consola'
 
 

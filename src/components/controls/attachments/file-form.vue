@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent                } from 'vue-demi'
+import { defineAsyncComponent                } from 'vue'
 import { Form                                } from 'vee-validate'
 import { useI18n                             } from 'vue-i18n'
 import  Icon                                 from '../../Icon.vue'

@@ -13,6 +13,7 @@ export const testWidget       = true
 export const includeInBuild   = [ 'vee-validate', 'vue-recaptcha', 'vue-multiselect']
 
 export const importMapOverRide = {
+    'axios':'https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/esm/axios.js'
     // 'vue-i18n'                                      : `https://cdn.jsdelivr.net/npm/vue-i18n@${getPackageVersion('vue-i18n')}/dist/vue-i18n.esm-browser.prod.js`,
     // 'pinia'                                         : `https://cdn.jsdelivr.net/npm/pinia@${getPackageVersion('pinia')}/dist/pinia.esm-browser.js`,
     // 'vue-demi'                                      : `https://cdn.jsdelivr.net/npm/vue-demi@${getPackageVersion('vue-demi')}/lib/index.mjs`,

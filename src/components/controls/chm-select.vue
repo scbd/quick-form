@@ -30,7 +30,7 @@
 
 <script>
 
-import { toRef, ref , computed, watch } from 'vue-demi'
+import { toRef, ref , computed, watch } from 'vue'
 
 import { object , array  } from 'yup'
 import { getData, lookUp } from '@scbd-chm/cached-apis'

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { toRef         , computed } from 'vue-demi'
+import { toRef         , computed } from 'vue'
 import { useField       }           from 'vee-validate'
 import { useI18n        }           from 'vue-i18n'
 import { readFieldRules }           from '../../composables/schema-validation'

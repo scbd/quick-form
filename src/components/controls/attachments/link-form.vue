@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent                } from 'vue-demi'
+import { defineAsyncComponent                } from 'vue'
 import { useI18n                             } from 'vue-i18n'
 import { isImageUrl                          } from '../../../composables/images'
 import { imageOnly            , nonImageOnly } from './composables/computed'

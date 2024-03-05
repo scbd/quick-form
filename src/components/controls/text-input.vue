@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { toRef, computed, watch } from 'vue-demi'
+import { toRef, computed, watch } from 'vue'
 
 import { useField       } from 'vee-validate'
 import { useI18n        } from 'vue-i18n'

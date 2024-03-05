@@ -1,4 +1,4 @@
-import { createApp   } from 'vue-demi'
+import { createApp   } from 'vue'
 import { createI18n  } from 'vue-i18n'
 import { createPinia } from 'pinia'
 import   component, { i18n }   from '@scbd/quick-form'

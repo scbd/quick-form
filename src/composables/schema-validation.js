@@ -1,7 +1,7 @@
 
 import { string, number, date, addMethod  } from 'yup'
 
-import { computed      } from 'vue-demi'
+import { computed      } from 'vue'
 import { DateTime      } from 'luxon'
 import   isFunction      from 'lodash.isfunction'
 import   isPlainObject   from 'lodash.isplainobject'
