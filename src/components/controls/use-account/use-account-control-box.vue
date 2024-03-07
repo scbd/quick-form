@@ -1,5 +1,5 @@
 <template>
-  <div  class="form-check check-input  mb-5" :class="{ 'has-error': !!(errorMessage && meta.touched), success: meta.valid }" >
+  <div  class="form-check   mb-5" :class="{ 'has-error': !!(errorMessage && meta.touched), success: meta.valid }" >
       <label :for="name" style="margin-left: -1.25rem;">{{ computedLabel }}</label>
       <input
           :name="name"

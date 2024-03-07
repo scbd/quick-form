@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAdmin" class="form-check check-input" :class="{ 'has-error': !!(errorMessage && meta.touched), success: meta.valid }" >
+  <div v-if="isAdmin" class="form-check check-input" :class="{ 'has-error': !!(errorMessage && meta.touched)}" >
 
     <label :for="name" style="margin-left: -1.25rem;">{{ computedLabel }}</label>
 
