@@ -10,13 +10,13 @@
 
             <div v-for="(row, index) in opts.rows" :key="index"  class="row">
               <div  class="col" v-for="({ name, is, value, options }, colIndex) in row.columns" :key="colIndex" >
-                <component v-if="!isPlainObject(is)" :is="is" :name="name"  :options="options" :value="value" :label="t(name)" :placeholder="t(`${name}.placeholder`)" :form-ctx="{ errors:form.errors, meta:form.meta, values:form.values, form, schema:opts, user, identifier }"/>
+                <component v-if="!isPlainObject(is)" :is="is" :name="name"  :options="options" :value="value" :label="t(name)" :placeholder="t(`${name}.placeholder`)" :form-ctx="{ errors:form.errors, meta:form.meta, values:form.values, form, schema:opts, user, identifier, isAdmin }"/>
               </div>
             </div>
 
             </ValidationSummary>
 
-            <Captcha class="pb-3"/>
+            <Captcha :is-admin="isAdmin" class="pb-3"/>
             
             <button class="submit-btn" type="submit">Submit</button>
 
@@ -30,7 +30,7 @@
 <script>
 
 import { toRef, ref, defineAsyncComponent, reactive } from 'vue'
-
+import   intersect     from 'lodash.intersection';
 import { useI18n            } from 'vue-i18n'
 import { Form  , useForm             } from 'vee-validate'
 import { initializeApiStore } from '@scbd-chm/cached-apis'
@@ -94,16 +94,25 @@ function setup(props){
   const feedbackStore  = useFeedbackStore()
   const optionsStore   = useOptionsStore ()
   const optionsPropRef = toRef           (props, 'options')
-  const meStore = useMeStore()
+  const meStore = useMeStore();
+  const isAdmin = ref(false);
+
   optionsStore.$subscribe(checkAuth(user))
   loadSchema()
-  meStore.$subscribe((m)=>{
+
+  const admins  = [ 'Administrator', 'idb-admin' ];
+
+  isAdmin.value = meStore.isAdmin({admins})
+  meStore.$subscribe((m, s)=>{
 
     if(m.payload.userID && m.payload.userID === 1) return;
     if(m.payload?.profile?.UserID && m.payload.profile.UserID === 1) return;
 
     loadSchema()
+
+    isAdmin.value = !!intersect(s.roles, admins).length
   })
+
   function loadSchema(){
     optionsStore.loadSchema(props.schemaName, optionsPropRef).then(async (s) => {
 
@@ -114,41 +123,29 @@ function setup(props){
       $i18n.mergeLocaleMessage(locale.value, sharedMessages || {})
 
       identifier.value = getIdentifierFromQuery()
-      document.value   = await loadExistingDocument(s, identifier.value)
+      if(!identifier.value) return 
 
-      //form = reactive(useForm( {initialValues:document.value }));
+      document.value   = await loadExistingDocument(s, identifier.value)
+      form.setValues(document.value)
+
+
     })
   }
   setTimeout(loadSchema, 500);
-  // optionsStore.loadSchema(props.schemaName, optionsPropRef).then(async (s) => {
 
-  //   options.value = s
 
-  //   const sharedMessages = await s.getMessages(locale.value)
-
-  //   $i18n.mergeLocaleMessage(locale.value, sharedMessages || {})
-
-  //   identifier.value = getIdentifierFromQuery()
-  //   document.value   = await loadExistingDocument(s, identifier.value)
-
-  //   form = reactive(useForm( {initialValues:document.value }));
-  // })
-
-  return { t, i, chmFormEl, user, document, identifier,  feedbackStore, opts: options, form }
+  return { t, i, chmFormEl, user, document, identifier,  feedbackStore, opts: options, form, isAdmin }
 }
 
 function created(){  initializeApiStore() }
 
 function onSubmit(values) { 
-  console.log('----------')
+
   this.form.handleSubmit( (values) => {
     const isEdit   = this.identifier
     const response = isEdit? putDocument(values): postDocument(values);
-
-    console.log('----------33333')
   })()
-  // const isEdit   = this.identifier
-  // const response = isEdit? await putDocument(values): await postDocument(values)
+
 
 }
 
