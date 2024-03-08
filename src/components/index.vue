@@ -1,11 +1,14 @@
 <template>
   <div v-if="opts.id"  ref="quickFormEl" :id="opts.id" >
+    <Icons v-once/>
     <div class="card">
       <div class="card-body">
-        <div class="mb-3"  >
-          <Icons v-once/>
-          <SuccessFeedback/>
-          <form v-if="!feedbackStore.msgs.length"  @submit.prevent="onSubmit" >
+        <Loading v-if="isLoading"/> 
+        <SuccessFeedback v-show="!isLoading"/>
+        <div  v-show="!isLoading" class="mb-3"  >
+          
+          
+          <form v-if="!msgs.length"  @submit.prevent="onSubmit" >
             <ValidationSummary v-bind="form">
 
             <div v-for="(row, index) in opts.rows" :key="index"  class="row">
@@ -29,7 +32,7 @@
 
 <script>
 
-import { toRef, ref, defineAsyncComponent, reactive } from 'vue'
+import { toRef, ref, defineAsyncComponent, reactive, computed } from 'vue'
 import   intersect     from 'lodash.intersection';
 import { useI18n            } from 'vue-i18n'
 import { Form  , useForm             } from 'vee-validate'
@@ -44,7 +47,9 @@ import { useFeedbackStore } from '../composables/stores/feedback'
 
 import { postDocument, getIdentifierFromQuery, getDocument, putDocument } from '../composables/api'
 
-import Captcha from './controls/captcha.vue'
+import Captcha from './controls/captcha.vue';
+import Loading from '@/components/Loading.vue';
+
 import consola from 'consola'
 
 const UseAccount        = defineAsyncComponent(() => import('./controls/use-account/index.vue'))
@@ -63,7 +68,7 @@ export default {
                 schemaName : { type: String, required: true },
                 options    : { type: Object }
               },
-  components: { UseAccount, Captcha, Form, Icons, TextInput, LStringArea, ChmSelect, Attachments, LString, ValidationSummary, SuccessFeedback, CheckBox },
+  components: { Loading, UseAccount, Captcha, Form, Icons, TextInput, LStringArea, ChmSelect, Attachments, LString, ValidationSummary, SuccessFeedback, CheckBox },
   methods   : { isPlainObject, onSubmit },
   created,  setup
 }
@@ -81,7 +86,7 @@ const checkAuth =  (user) => async (mutation) => {
 }
 
 function setup(props){
- 
+  const isLoading = ref(true);
   let form = reactive(useForm());
   const   $i18n          = useI18n({ useScope: 'global' })
   const   chmFormEl      = ref(null)
@@ -96,25 +101,29 @@ function setup(props){
   const optionsPropRef = toRef           (props, 'options')
   const meStore = useMeStore();
   const isAdmin = ref(false);
-
+  const msgs = computed(()=> feedbackStore.msgs)
   optionsStore.$subscribe(checkAuth(user))
   loadSchema()
 
   const admins  = [ 'Administrator', 'idb-admin' ];
 
   isAdmin.value = meStore.isAdmin({admins})
-  meStore.$subscribe((m, s)=>{
+  meStore.$subscribe(async(m, s)=>{
+    isLoading.value = true;
 
-    if(m.payload.userID && m.payload.userID === 1) return;
-    if(m.payload?.profile?.UserID && m.payload.profile.UserID === 1) return;
+    if(m.payload.userID && m.payload.userID === 1) return isLoading.value = false;
+    if(m.payload?.profile?.UserID && m.payload.profile.UserID === 1) return isLoading.value = false;
 
-    loadSchema()
+    await loadSchema()
 
     isAdmin.value = !!intersect(s.roles, admins).length
+
+    setTimeout(()=> isLoading.value = false, 500);
   })
 
   function loadSchema(){
-    optionsStore.loadSchema(props.schemaName, optionsPropRef).then(async (s) => {
+    isLoading.value = true;
+    return optionsStore.loadSchema(props.schemaName, optionsPropRef).then(async (s) => {
 
       options.value = s
 
@@ -123,27 +132,34 @@ function setup(props){
       $i18n.mergeLocaleMessage(locale.value, sharedMessages || {})
 
       identifier.value = getIdentifierFromQuery()
-      if(!identifier.value) return 
+      if(!identifier.value) return setTimeout(()=> isLoading.value = false, 500)
 
       document.value   = await loadExistingDocument(s, identifier.value)
       form.setValues(document.value)
 
-
+      setTimeout(()=> isLoading.value = false, 500);
     })
   }
   setTimeout(loadSchema, 500);
 
 
-  return { t, i, chmFormEl, user, document, identifier,  feedbackStore, opts: options, form, isAdmin }
+  return { msgs, t, i, chmFormEl, user, document, identifier,  feedbackStore, opts: options, form, isAdmin,isLoading }
 }
 
 function created(){  initializeApiStore() }
 
 function onSubmit(values) { 
+  this.isLoading = true
+  const feedbackStore  = useFeedbackStore(this.$pinia);
 
-  this.form.handleSubmit( (values) => {
+
+  const t = this.form.handleSubmit(async  (values) => {
     const isEdit   = this.identifier
-    const response = isEdit? putDocument(values): postDocument(values);
+    const { data, status, msg } = isEdit? await putDocument(values): await postDocument(values);
+
+    if(status === 200) feedbackStore.addFeedback(msg)
+
+    setTimeout(()=> this.isLoading = false, 500);
   })()
 
 

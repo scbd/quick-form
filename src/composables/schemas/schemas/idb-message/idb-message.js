@@ -19,6 +19,17 @@ const additionalOptions = [
   }
 ]
 
+const submitMsg = {
+  name: 'You message has been submitted',
+  message: 'Your message has been submitted and is waiting review.  Check back regularly for it\'s publication as you will not be notified.'
+}
+
+const editMsg = {
+  name: 'You message has been edited',
+  message: 'Your message has been edited and is waiting review.  Check back regularly for it\'s republication as you will not be notified.'
+}
+
+
 export default {
   id         : 'idb-message-form',
   apiUrl     : 'https://api.cbd.int/api/v2023/idb/messages',
@@ -39,6 +50,7 @@ export default {
     {  columns: [ { name: 'attachments',                is: 'Attachments', options: { type: 'both', multiple: true } } ] },
     {  columns: [ { name: 'type',                       is: 'ChmSelect',   options: { type: 'allOrgTypes', additionalOptions,  rules: { required: true } }  }  ] },
   ],
-  getMessages
+  getMessages,
+  submitMsg,editMsg
 }
 

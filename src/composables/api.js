@@ -15,7 +15,9 @@ import   lodashSet      from 'lodash.set'
 export function sanitize(data, sanitizers){
   const dataNilsRemoved = cleanNilsClone (data)
 
-  delete dataNilsRemoved.meta
+  if(dataNilsRemoved?.meta)
+    delete dataNilsRemoved.meta
+
   if(sanitizers)
     for (const aFilterKey of Object.keys(sanitizers)) {
       const prop      = lodashGet(dataNilsRemoved, aFilterKey)
@@ -72,8 +74,9 @@ export const postDocument = async (document) => {
 
     const { status, data } = await axios.post(apiUrl, sanitize(document, sanitizers), { headers })
 
-    if(status == 200) addFeedback(submitMsg || defaultSubmitMsg)
-    return data
+    const msg = submitMsg || defaultSubmitMsg
+
+    return { data, status, msg }
   }
   catch (e){ 
     const { apiUrl }  = await getOptions()
@@ -104,7 +107,12 @@ export const putDocument = async (document, identifier = getIdentifierFromQuery(
     const { status, data } = await axios.put(`${apiUrl}/${encodeURIComponent(identifier)}`,sanitize(document, sanitizers), { headers } )
     
     if(status == 200) addFeedback(editMsg || defaultEditMsg)
-    return data
+
+
+    const msg = editMsg || defaultEditMsg
+  
+
+    return  { data, status, msg }
   }
   catch (e){
     if(e.message==='Network Error')

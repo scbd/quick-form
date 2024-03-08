@@ -3,6 +3,17 @@ import   getMessages                from './locales/index'
 
 const world =    { "@context": "https://schema.org", "@type": "Place", identifier: '5D13EC43-F3E0-415E-AF67-62CCC85899AF', name: { "en": "Global", "es": "Mundo", "ar": "عالمي", "ru": "Глобальный уровень"} }
 
+const submitMsg = {
+  name: 'You celebration has been submitted',
+  message: 'Your celebration has been submitted and is waiting review.  Check back regularly for it\'s publication as you will not be notified.'
+}
+
+const editMsg = {
+  name: 'You celebration has been edited',
+  message: 'Your celebration has been edited and is waiting review.  Check back regularly for it\'s republication as you will not be notified.'
+}
+
+
 export default {
   id         : 'idb-action-form',
   apiUrl     : 'https://api.cbd.int/api/v2023/idb/actions',
@@ -27,5 +38,6 @@ export default {
     {  columns: [ { name: 'image',                               is: 'Attachments', options: { type: 'both', multiple: false, imageOnly: true  } } ] }
   ], 
 
-  getMessages, sanitizers: { 'location': countrySanitizer }
+  getMessages, sanitizers: { 'location': countrySanitizer },
+  submitMsg,editMsg
 }
