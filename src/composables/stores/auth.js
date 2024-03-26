@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { createApp   } from 'vue-demi'
+import { createApp   } from 'vue'
 import { isServer    } from '../ssr'
 import   AuthIframe    from './iframe.vue'
 

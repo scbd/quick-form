@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import { computed        } from 'vue-demi'
+import { computed        } from 'vue'
 import { mapState        } from 'pinia'
 import { useI18n         } from 'vue-i18n'
 import { useAuthStore    } from '@/composables/stores/auth'

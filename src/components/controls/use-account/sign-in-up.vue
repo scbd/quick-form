@@ -1,25 +1,26 @@
 <template >
     <div ref="SignInUp">
-        <div  v-if="!me?.isAuthenticated && show"  class="alert alert-warning show" role="alert" >
+        <div  v-if="!isAuthenticated && show"  class="alert alert-warning show" role="alert" >
             <button @click="hide()" type="button" class="close float-right" aria-label="Close">
                 <Icon name="cancel"/>
             </button>
 
             <p v-if="options?.accountsUrl">
                 {{ t('You are not signed in with your UN Biodiverity account.') }}  
-                {{ t('Please') }} <a :href="`${options?.accountsUrl}/signin?returnUrl=${returnUrl}`">{{ t('sign in')}}</a> {{ t('or optionally')}} <a :href="`${options?.accountsUrl}/signup?returnUrl=${returnUrl}`">{{ t('sign up')}}</a>.
+                {{ t('Optionally') }} <a :href="`${options?.accountsUrl}/signin?returnUrl=${returnUrl}`">{{ t('sign in')}}</a> {{ t('or')}} <a :href="`${options?.accountsUrl}/signup?returnUrl=${returnUrl}`">{{ t('sign up')}}</a>.
             </p>
         </div>
     </div>
 </template>
 
 <script>
-import { toRef   , ref } from 'vue-demi';
+import { toRef   , ref, computed } from 'vue';
 import { isServer      } from '@/composables/ssr.js';
 import   isAdmin         from '@/composables/is-admin.js';
 import   t               from '@/composables/i18n.js';
 import   Icon            from '@/components/Icon.vue';
 import { useMeStore }    from '@/composables/stores/me';
+import set from 'lodash.set';
 
 export default {
     name      : 'SignInUp',
@@ -33,9 +34,20 @@ function setup(props){
     const   options        = toRef(props, 'options');
     const   show           = ref(true)
     const   setUpFunctions = { t, isAdmin, hide };
-    const   me             = useMeStore();
+    const   meStore             = useMeStore();
+    const   isAuthenticated     = ref(meStore.isAuthenticated);
 
-    return { me, show, options, returnUrl, ...setUpFunctions };
+    meStore.$subscribe((m)=>{
+
+            if(m.payload.userID && m.payload.userID === 1) return isAuthenticated.value = false;
+            if(m.payload?.profile?.UserID && m.payload.profile.UserID === 1) return isAuthenticated.value = false;
+
+            show.value = false;
+            return isAuthenticated.value = true
+        })
+
+        setTimeout(()=>isAuthenticated.value = meStore.isAuthenticated, 500);
+    return { isAuthenticated,  show, options, returnUrl, ...setUpFunctions };
 }
 
 function mounted(){

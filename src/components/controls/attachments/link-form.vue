@@ -9,19 +9,24 @@
         <FormErrorSummary v-bind="{ values, errors, meta }">
           <div class="row">
             <div class="col-12">
-              <TextInput @change="onChange"    :options="{ type:'url', rules: { format: 'url', required: true } }" :name="`${name}.contentUrl`"  :label="t(`.contentUrl`)" :placeholder="t(`.contentUrl.placeholder`)"  :value="contentUrl" :form-ctx="{ errors, meta, values }" />
+              <TextInput v-if="options?.imageOnly"  @change="onChange"    :options="{ type:'url', rules: { format: 'imageUrl', required: true } }" :name="`${name}.contentUrl`"  :label="t(`.contentUrl`)" :placeholder="t(`.contentUrl.placeholder`)"  :value="contentUrl" :form-ctx="{ errors, meta, values }" />
+              <TextInput v-if="!options?.imageOnly && !options?.imageOrYoutubeOnly"  @change="onChange"    :options="{ type:'url', rules: { format: 'url', required: true } }" :name="`${name}.contentUrl`"  :label="t(`.contentUrl`)" :placeholder="t(`.contentUrl.placeholder`)"  :value="contentUrl" :form-ctx="{ errors, meta, values }" />
+              <TextInput v-if="options?.imageOrYoutubeOnly"  @change="onChange"    :options="{ type:'url', rules: { format: 'imageOrYoutubeUrl', required: true } }" :name="`${name}.contentUrl`"  :label="t(`.contentUrl`)" :placeholder="t(`.contentUrl.placeholder`)"  :value="contentUrl" :form-ctx="{ errors, meta, values }" />
+
+              
               <!-- <TextInput @change="onChange" v-if="!isImage"  :options="{ type:'url', rules: { format: 'url', required: true } }" :name="`${name}.url`"         :label="t(`.url`)"        :placeholder="t(`.url.placeholder`)"         :value="url"        :form-ctx="{ errors, meta, values }"/> -->
             </div>
           </div>
 
           <div class="row">
             <div class="col-12">
-              <LString @change.capture="onChange" v-if="isImage"  :options="{ rules: { max: 100, required: true } }" :name="`${name}.caption`" :label="t(`.caption`)" :placeholder="t(`.caption.placeholder`)" :value="caption" :form-ctx="{ errors, meta, values }"/> 
-              <LString @change.capture="onChange" v-if="!isImage" :options="{ rules: { max: 100, required: true } }" :name="`${name}.name`"    :label="t(`.name`)"    :placeholder="t(`.name.placeholder`)"    :value="theName" :form-ctx="{ errors, meta, values }"/>
+              <LString @change.capture="onChange" v-if="options?.imageOrYoutubeOnly || options?.imageOnly"  :options="{ rules: { max: 100, required: true } }" :name="`${name}.caption`" :label="t(`.caption`)" :placeholder="t(`.caption.placeholder`)" :value="caption" :form-ctx="{ errors, meta, values }"/> 
+              <LString @change.capture="onChange" v-if="!options?.imageOnly && !options?.imageOrYoutubeOnly" :options="{ rules: { max: 100, required: true } }" :name="`${name}.name`"    :label="t(`.name`)"    :placeholder="t(`.name.placeholder`)"    :value="theName" :form-ctx="{ errors, meta, values }"/>
             </div>
           </div>
 
           <TextInput @change.capture="onChange" :options="{ type:'hidden', rules: { required: true } }" :name="`${name}.@type`" :label="t(`.@type`)" :placeholder="t(`.@type.placeholder`)" :value="type" :form-ctx="{ errors, meta, values }"/>
+  
         </FormErrorSummary>
 
         <button class="submit-btn" type="submit">{{t('Add link')}}</button>
@@ -32,7 +37,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent                } from 'vue-demi'
+import { defineAsyncComponent                } from 'vue'
 import { useI18n                             } from 'vue-i18n'
 import { isImageUrl                          } from '../../../composables/images'
 import { imageOnly            , nonImageOnly } from './composables/computed'
@@ -82,7 +87,7 @@ function isImage(){
   
   if(this.nonImageOnly) return false
 
-  return this.imageOnly || isImageUrl(this.contentUrl) || isImageUrl(this.url)
+  return this.options.imageOnly || isImageUrl(this.contentUrl) || isImageUrl(this.url)
 }
 
 function onSubmit(value) {

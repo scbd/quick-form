@@ -26,6 +26,7 @@
           <div class="row" >
             <div class="col-12 text-center">
               <div class="upload-area" v-if="!uploaded.file">
+           
                 <FileUpload
                   class="alert alert-info"
                   ref="upload"
@@ -33,6 +34,8 @@
                   :thread="25"
                   @input-file="onFileUpload"
                   :multiple="false"
+                  :extensions="isImage? /\.(jpg|jpeg|png|gif|bmp|webp|svg|tiff)$/i : undefined"
+                  :accept="isImage? 'image/*' : undefined"
                   >
 
                   <Icon class="chm-icon-x3" name="cloud-upload"/>
@@ -62,7 +65,7 @@
             <TextInput v-if="inputValue.contentUrl"   :name="`${name}.@type`"    :label="'.@type'" :placeholder="' '" :value="isImage? 'ImageObject': 'CreativeWork'"   :options="{ type: 'hidden', rules: { required: true } }" :form-ctx="{ errors, meta, values }"/>
 
             <TextInput v-if="inputValue?.dateModified"   :name="`${name}.dateModified`"    :label="' '" :placeholder="' '" :value="inputValue.dateModified"   :options="{ type: 'hidden', rules: { required: true } }" :form-ctx="{ errors, meta, values }"/>
-            <TextInput v-if="inputValue?.contentSize"    :name="`${name}.contentSize`"     :label="' '" :placeholder="' '" :value="inputValue.contentSize"    :options="{ type: 'hidden', rules: { type: 'number', max: uploaded.isImage? 3000000 : 1000000000, required: true } }" :form-ctx="{ errors, meta, values }"/>
+            <TextInput v-if="inputValue?.contentSize"    :name="`${name}.contentSize`"     :label="' '" :placeholder="' '" :value="inputValue.contentSize"    :options="{ type: 'hidden', rules: { type: 'contentSize', max: uploaded.isImage? 300000 : 1000000000, required: true } }" :form-ctx="{ errors, meta, values }"/>
             <TextInput v-if="inputValue?.encodingFormat" :name="`${name}.encodingFormat`"  :label="' '" :placeholder="' '" :value="inputValue.encodingFormat" :options="{ type: 'hidden', rules: { required: true } }" :form-ctx="{ errors, meta, values }"/>
           </div>
           
@@ -77,7 +80,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent                } from 'vue-demi'
+import { defineAsyncComponent                } from 'vue'
 import { Form                                } from 'vee-validate'
 import { useI18n                             } from 'vue-i18n'
 import  Icon                                 from '../../Icon.vue'
@@ -194,9 +197,10 @@ function isInEditMode(){
 }
 
 function isImage(){
+
   if(this.nonImageOnly) return false
 
-  return this.imageOnly || this.uploaded.isImage
+  return this.imageOnly || this.options.imageOnly || this.options.imageOrYoutubeOnly || this.uploaded.isImage
 }
 
 function hasPreview(url){

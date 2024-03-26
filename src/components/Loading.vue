@@ -1,4 +1,3 @@
-
 <template>
   <div class="loading">
     <div class="cont mx-auto">
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-import Spinner from './Spinner.vue'
+import Spinner from './Spinner.vue';
 
 export default {
   name      : 'Loading',
@@ -23,7 +22,7 @@ export default {
 </script>
 
 <style scoped>
-.loading{ min-height: 3em; }
+.loading{ min-height: 3em; margin-bottom: 10px; }
 .cont{position: relative; height: 45px; width: 47px; }
 .ring{ position: absolute;   top: 50%; left: 50%; transform: translate(-50%, -50%);}
 .percent{ font-size: 1.5em; font-weight: bold; color: #009b48; display: inline-block; }

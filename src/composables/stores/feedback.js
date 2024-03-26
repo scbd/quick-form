@@ -10,9 +10,9 @@ function state(){ return initState }
 
 function addFeedback({ status, name, message, code, identifier }){
 
-  const msgs = [ { status, name, message, code, identifier }, ...this.$state.msgs]
+  //const msgs = [ { status, name, message, code, identifier }, ...this.$state.msgs]
 
-  this.$patch({ msgs })
-
-  return msgs
+  //this.$patch({ msgs })
+this.msgs.push({ status, name, message, code, identifier })
+  return this.msgs
 }

@@ -6,7 +6,7 @@
 </template>
   
   <script>
-  import { toRefs               } from 'vue-demi'
+  import { toRefs               } from 'vue'
   import { useMeStore           } from '@/composables/stores/me'
   import   SignInUp               from './sign-in-up.vue'
   import   UseAccountControlBox   from './use-account-control-box.vue'

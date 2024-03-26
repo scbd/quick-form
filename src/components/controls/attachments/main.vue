@@ -9,7 +9,11 @@
 
             <div v-if="!options.multiple && (previewSrc || inputValue)" class="row">
               <div class="col text-center">
-                <div v-if="!isImage(getUrl())">
+                
+                <YouTube v-if="isYoutube(getUrl())" :url="getUrl()" :title="inputValue?.caption[locale]" class="col my-auto"/>
+
+
+                <div v-if="!isImage(getUrl()) && !isYoutube(getUrl())">
                   <Icon  name="file" style="width: 3em; height: 3em;"/> <br/>
                   <span v-if="isTemporary(getUrl())" class="text-muted">{{ inputValue?.name[locale] }}</span>
                   <a v-if="!isTemporary(getUrl())" :href="getUrl()" target="_blank" rel="noopener noreferrer"> <Icon name="external-link" style="position: relative; margin-right: .5em;top:3px;"/>{{ inputValue?.name[locale] }}</a>
@@ -39,14 +43,15 @@
 
             <div v-if="options.multiple && inputValue?.length">
               <div v-for="(row, $index) in inputValue" :key="$index" class="row" >
+                <YouTube v-if="isYoutube(getUrl(row))" :url="getUrl(row)" :title="row?.name[locale]" class="col my-auto"/>
 
-                <div class="col-2 text-center">
+                <div v-if="!isYoutube(getUrl(row))" class="col-2 text-center">
                   <img v-if="isImage(getUrl(row))" class="img-preview" :src="getSrc(row)" />
                   <!-- <img v-if="isDataUrl(row.contentUrl) || isImageUrl(row.contentUrl)" class="img-preview" :src="dataUrl(row.contentUrl)" /> -->
 
                   <Icon v-if="!isImage(getUrl(row))" name="file" style="width: 3em; height: 3em;"/>
                 </div>
-                <div class="col my-auto" style="margin: auto;">
+                <div v-if="!isYoutube(getUrl(row))" class="col my-auto" style="margin: auto;">
                   <div v-if="isImage(getUrl(row))">
                     <span v-if="isTemporary(getUrl(row))">{{ row.caption[locale] }}</span>
                     <a v-if="!isTemporary(getUrl(row))" :href="getUrl(row)" target="_blank" rel="noopener noreferrer"> <Icon name="external-link" style="position: relative; margin-right: .5em;top:3px;"/>{{ row?.caption[locale] }}</a>
@@ -84,11 +89,12 @@
 </template>
 
 <script>
-import { toRef          , computed }    from 'vue-demi'
+import { toRef          , computed }    from 'vue'
 import { useField       }               from 'vee-validate'
 import { useI18n        }               from 'vue-i18n'
 import   isFunction                     from 'lodash.isfunction'
 import   isPlainObject                  from 'lodash.isplainobject'
+import   YouTube     from '@/components/you-tube.vue';
 
 import isEmpty from 'lodash.isempty'
 import { readFieldRules }               from '@/composables/schema-validation'
@@ -102,7 +108,7 @@ import   FileForm   from './file-form.vue'
 
 export default {
   name      : 'AttachmentControl',
-  components: { LinkForm, FileForm, Icon },
+  components: { YouTube, LinkForm, FileForm, Icon },
   props: {
             name          : { type: String, required: true },
             formCtx       : { type: Object, required: true },
@@ -112,7 +118,7 @@ export default {
             options       : { type: Object, default: defaultOptions, validator }
         },
   computed: { showFileButton, showUrlButton, showButtons, imageOnly, nonImageOnly,  },
-  methods : { toggleLinkForm, toggleFileForm, addLink, addPreviewBlob, getDataUrl, remove, hasPreview, isImage, getUrl, isTemporary, getSrc },
+  methods : { isYoutube,toggleLinkForm, toggleFileForm, addLink, addPreviewBlob, getDataUrl, remove, hasPreview, isImage, getUrl, isTemporary, getSrc },
   setup, data
 }
 
@@ -139,6 +145,7 @@ function data(){
 }
 
 function addLink(value){
+  console.log('add link', value)
   const targetValue = lodashGet(value, this.name)
 
   if(!targetValue) return
@@ -186,9 +193,16 @@ function getSrc({ url, contentUrl } = this.inputValue || {}){
 }
 
 function isImage(url){
-  if(this.nonImageOnly) return false
+  if(this.nonImageOnly || this?.options?.imageOrYoutubeOnly) return false
 
   return this.imageOnly || this.hasPreview(url) || isImageUrl(url)
+}
+
+function isYoutube(url){
+  if(!this?.options?.imageOrYoutubeOnly && !this.options?.multiple) return false
+  const regx = /^https?:\/\/(?:www\.)?(youtube\.com|youtu.be).*$/i
+
+  return regx.test(url)
 }
 
 function hasPreview(url){

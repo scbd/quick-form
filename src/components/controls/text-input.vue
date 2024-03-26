@@ -14,13 +14,14 @@
     />
 
     <p class="help-message" v-show="(errorMessage && meta.touched) || meta.valid">
-      {{ errorMessage  }}
+      {{ !isRequiredDate? errorMessage :  msg}}
+
     </p>
   </div>
 </template>
 
 <script>
-import { toRef, computed, watch } from 'vue-demi'
+import { toRef, computed, watch } from 'vue'
 
 import { useField       } from 'vee-validate'
 import { useI18n        } from 'vue-i18n'
@@ -53,17 +54,20 @@ function setup(props) {
 
     const { value: inputValue, errorMessage, handleBlur, handleChange, meta } = useField(name, rules, { initialValue: props.value });
 
+    const isRequiredDate = computed(()=> errorMessage?.value ==='this must be a `date` type, but the final value was: `Invalid Date` (cast from the value `""`).')
     const breaker = watch(inputValue, (first) => {
+
                                                     if(!options.value.type.includes('date')) return breaker()
 
                                                     if(!isValidDateString(first)) return breaker()
 
                                                     inputValue.value = first.includes('T')? first.substring(0, first.indexOf('T')) : first
 
-                                                    breaker()
+                                                   // breaker()
                                               });
 
-    return { t, handleChange, handleBlur, errorMessage, inputValue, meta, computedLabel, options }
+                  const msg=`${label.value} is required and must be a valid date`
+    return { t, msg, handleChange, handleBlur, isRequiredDate,errorMessage, inputValue, meta, computedLabel, options }
 }
 
 // const 

@@ -17,7 +17,7 @@
 
       <h5 v-if="numberOfErrors">{{t('All errors must be resolved before submitting:')}}</h5>
       <ul v-if="numberOfErrors">
-        <li v-for="(message, fieldId) in errors" :key="fieldId">  <a  :href="`#${fieldId}`"  > {{message}} </a> </li>
+        <li v-for="(message, fieldId) in errors" :key="fieldId">  <a  :href="`#${fieldId}`"  > {{transFormError(fieldId,message)}} </a> </li>
       </ul>
 
     </div>
@@ -39,7 +39,7 @@
 
       <h5 v-if="numberOfErrors">{{t('All errors must be resolved before submitting:')}}</h5>
       <ul v-if="numberOfErrors">
-        <li v-for="(message, fieldId) in errors" :key="fieldId">  <a  :href="`#${fieldId}`"  > {{message}} </a> </li>
+        <li v-for="(message, fieldId) in errors" :key="fieldId">  <a  :href="`#${fieldId}`"  > {{transFormError(fieldId,message)}} </a> </li>
       </ul>
 
       <div v-if="optionsStore.debug" class="debug">
@@ -68,7 +68,7 @@ export default {
                 values       : { type: Object                 }
               },
   computed : { numberOfErrors , isVisible, numberOfOtherErrors},
-  methods  : { hide, subscribe },
+  methods  : { hide, subscribe, transFormError },
 
   watch:{
     errors: { handler, deep: true} 
@@ -107,8 +107,15 @@ function setup({ hiddenFields }){
   return { t, hiddenFields, locale, clean:cleanNilsClone, optionsStore, errorStore }
 }
 
+function transFormError(name, error){
+  const isRequiredDate = name === 'startDate' && error ==='this must be a `date` type, but the final value was: `Invalid Date` (cast from the value `""`).'
+
+  return !isRequiredDate? error : 'Date is required and must be a valid date'
+}
 function created(){
   this.errorStore.$subscribe(this.subscribe)
+
+
 }
 
 function subscribe(){

@@ -1,5 +1,5 @@
 <template>
-  <ChmComponent :options="options" :schema-name="schemaName" id="chm-form"/>
+  <ChmComponent :options="options" :schema-name="schemaName" id="quick-form"/>
 </template>
 
 <script>

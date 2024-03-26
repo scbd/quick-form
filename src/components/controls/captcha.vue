@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { computed        } from 'vue-demi'
+import { computed        } from 'vue'
 import { mapState        } from 'pinia'
 import { useI18n         } from 'vue-i18n'
 import { VueRecaptcha    } from 'vue-recaptcha'
@@ -24,6 +24,7 @@ import { useOptionsStore } from '../../composables/stores/options'
 
 export default {
   name      : 'Captcha',
+  props     :{isAdmin : { type: Boolean, required: true }},
   components: { VueRecaptcha },
   methods   : {  onVerify, onExpired, onRender, onError },
   computed  : { ...mapState(useOptionsStore, ['sitekey', 'id']) },
@@ -50,10 +51,11 @@ function setup(){
   const { t, locale }  = useI18n({ useScope: 'global' })
   const { admins }     = useOptionsStore()
   const   authStore    = useAuthStore()
-  const   me           = useMeStore()
-  const   isAdmin      = computed(() =>  me.isAdmin({ admins }));
+  // const   me           = useMeStore()
+  // const   isAdmin      = computed(() =>  me.isAdmin({ admins }));
 
 
-  return { t, locale, authStore, isAdmin }
+
+  return { t, locale, authStore}
 }
 </script>

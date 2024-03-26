@@ -30,7 +30,7 @@
 
 <script>
 
-import { toRef, ref , computed, watch } from 'vue-demi'
+import { toRef, ref , computed, watch } from 'vue'
 
 import { object , array  } from 'yup'
 import { getData, lookUp } from '@scbd-chm/cached-apis'
@@ -43,7 +43,7 @@ import { useMeStore } from '../../composables/stores/me'
 import isFunction    from 'lodash.isfunction'
 import isPlainObject from 'lodash.isplainobject'
 import Multiselect   from 'vue-multiselect'
-
+import   intersect     from 'lodash.intersection';
 
 export default {
   name       : 'ChmSelectInputControl',
@@ -125,12 +125,11 @@ async function getOptionList(type, additionalOptions = []){
 }
 
 
-function updateOptionList({ options, formCtx }, optionsList){ return async () => {
+function updateOptionList({ options, formCtx }, optionsList){ return async (m,s) => {
 
     const { type, additionalOptions = [] } = options
-    const me      = useMeStore()
-
-    const isAdmin = me.isAdmin(formCtx.schema)
+    const admins  = [ 'Administrator', 'idb-admin' ];
+    const isAdmin = !!intersect(s?.roles || [], admins).length
 
     if(!isTypeValid(type)) throw new Error('Error invalid chm-options type: ', type)
 

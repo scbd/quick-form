@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAdmin" class="form-check check-input" :class="{ 'has-error': !!(errorMessage && meta.touched), success: meta.valid }" >
+  <div v-if="isAdmin" class="form-check check-input" :class="{ 'has-error': !!(errorMessage && meta.touched)}" >
 
     <label :for="name" style="margin-left: -1.25rem;">{{ computedLabel }}</label>
 
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { toRefs,  computed } from 'vue-demi'
+import { toRefs,  computed } from 'vue'
 import { useField       }            from 'vee-validate'
 import { useI18n        }            from 'vue-i18n'
 import { readFieldRules }            from '../../composables/schema-validation'

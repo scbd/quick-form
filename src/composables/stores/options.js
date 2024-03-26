@@ -15,7 +15,9 @@ const initState = {
   sanitizers  : undefined,
   getMessages : undefined,
   sitekey     : '',
-  debug       : false
+  debug       : false,
+  submitMsg   : undefined,
+  editMsg     : undefined,
 }
 
 function state(){ return initState }
@@ -29,11 +31,5 @@ async function loadSchema(identifier, options = {}){
   this.$patch({ ...schema })
 
   return this
-}
-
-function reactiveState(){
-  const { mode, id, apiUrl, accountsUrl, admins, rows, debug, sitekey } = storeToRefs(this)
-
-  return { mode, id, apiUrl, accountsUrl, admins, rows, debug, sitekey }
 }
 
