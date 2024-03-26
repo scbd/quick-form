@@ -1,6 +1,6 @@
 {
   "name": "@scbd/quick-form",
-  "version": "0.0.9-alpha",
+  "version": "1.0.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
