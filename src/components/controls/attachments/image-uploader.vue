@@ -136,7 +136,7 @@ function save() {
 
 <style  >
 
-/* @import url('https://cdn.cbd.int/vue-advanced-cropper@2.8.1/dist/style.css'); */
+/* @import url('https://cdn.jsdelivr.net/npm/vue-advanced-cropper@2.8.1/dist/style.css'); */
 .cropper-wrapper{position: relative; width: 100%; height: 100%;
 	user-select: none;
 	border: solid 1px #eee;

@@ -199,7 +199,7 @@ function isRulesValid(value){
 
 
 <style scoped>
-/* @import url("https://cdn.cbd.int/vue-multiselect@next/dist/dist/vue-multiselect.css"); */
+/* @import url("https://cdn.jsdelivr.net/npm/vue-multiselect@next/dist/dist/vue-multiselect.css"); */
 
 .help {
   padding-left: 5px;
