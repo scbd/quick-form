@@ -1,4 +1,4 @@
-import WidgetBuilder from 'https://cdn.cbd.int/@scbd/self-embedding-component@3.1.0'
+import WidgetBuilder from 'https://cdn.jsdelivr.net/npm/@scbd/self-embedding-component@3.1.0/dist/index.min.js'
 import Package       from '../package.json'
 
 // load external css for dependant components
